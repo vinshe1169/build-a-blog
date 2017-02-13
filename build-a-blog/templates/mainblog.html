@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+<hr>
+{% block content %}
+
+  {% for p in posts %}
+    {{p.render() | safe}}
+  {% endfor %}
+
+{% endblock %}
