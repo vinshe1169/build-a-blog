@@ -1,5 +1,17 @@
-<!--{% extends "base.html" %}-->
-
+{% extends "base.html" %}
 {% block content %}
-  {{post.render() | safe }}
+<div class="post">
+  <div class="post-heading"><br><br>
+    <div class="post-title">
+      {{post.title}}
+    </div>
+    <div class="post-date" align = right>
+      {{post.submitted_dt.strftime("%b %d, %Y")}}
+    </div><hr>
+    <div class="post-content">
+      {{post.content}}
+    </div>
+
+  </div>
+</div>
 {% endblock %}

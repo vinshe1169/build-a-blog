@@ -40,20 +40,20 @@ class Post(db.Model):
     submitted_dt = db.DateTimeProperty(auto_now_add = True)
     modified_dt = db.DateTimeProperty(auto_now = True)
 
-    def render(self):
-        self._render_text = self.content.replace('\n','<br>')
-        return render_str("post.html",p = self)
 
+class Permalink(Handler):
+    def get(self, id):
+        s= ""
+        post = Post.get_by_id(int(id))
+        s = s + post.title + "<br>" + "<hr>"
 
-class MainblogHandler(Handler):
-    def get(self):
-        self.render_mainblog()
+        s = s + post.content + "<br>" + "<br><br>"
 
-    def render_mainblog(self):
-        posts = db.GqlQuery("SELECT * FROM Post ORDER BY submitted_dt DESC Limit 5")
-        self.render("mainblog.html",posts = posts)
+        header = "<h2>Mang's Blog</h2>"
+        form = ("<form method ='post' action='/'>" + s + id + "</form>")
+        self.response.write(header + form)
 
-class NewPostHandler(Handler):
+class NewPosts(webapp2.RequestHandler):
     def render_newpost(self, title="", content="", error= ""):
         t = jinja_env.get_template("newpost.html")
         response = t.render(title=title, content=content, error=error)
@@ -70,19 +70,35 @@ class NewPostHandler(Handler):
         if title and content:
             p = Post(title = title, content = content)
             p.put()
-            self.redirect('/blog/%s' % p.key().id())
+            #self.redirect('/blog/id=%s' % str(p.key().id()))
+            id = p.key().id()
+            self.redirect('/blog/%s' % id)
         else:
             error = "We need both title and content!"
-            self.render("newpost.html", title = title, content=content, error= error)
-            #return render_newpost("newpost.html", title=title,content=content,error= error)
+            self.redirect("newpost.html",title=title,content=content,error= error)
 
-class PostPageHandler(Handler):
-    def get(self,id):
-        post = Post.get_by_id(int(id))
-        self.render("permalink.html",post = post)
+            #self.render(title, content, error)
+
+class MainblogHandler(Handler):
+    def render_mainblog(self, title ="", content ="", error = ""):
+        posts = db.GqlQuery("SELECT * FROM Post ORDER BY submitted_dt DESC Limit 5")
+        s = ""
+        for i in posts:
+            s = s + i.title + "<div align='right'>" + str(i.submitted_dt) + "</div>"
+            s = s + "<hr>"
+            s = s + i.content + "<br>"
+
+        self.render("mainblog.html",posts = posts)
+        #self.response.write("Thanks")
+        header = "<h2>Mang's Blog</h2>"
+        form = ("<form method ='post' action='/'>" + s + "</form>")
+        self.response.write(header + form)
+
+    def get(self):
+        self.render_mainblog()
 
 app = webapp2.WSGIApplication(
-[('/blog', MainblogHandler),
-('/blog/newpost', NewPostHandler),
-webapp2.Route('/blog/<id:\d+>', PostPageHandler)
+[('/blog/newpost', NewPosts),
+ ('/blog/', MainblogHandler),
+ webapp2.Route('/blog/<id:\d+>', Permalink)
 ], debug=True)

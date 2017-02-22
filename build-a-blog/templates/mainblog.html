@@ -1,9 +1,12 @@
 {% extends "base.html" %}
-<hr>
 {% block content %}
-
   {% for p in posts %}
-    {{p.render() | safe}}
+  <label>
+    <div align= left><a href="/blog/<id:\d+"p.id>{{p.title}}</a></div>
+    <div align=right>{{p.submitted_dt.strftime("%b %d, %Y")}}</div>
+  </label>
+  <hr>
+  <label>{{p.content}}</label>
+<br><br>
   {% endfor %}
-
 {% endblock %}
