@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
   {% for p in posts %}
-    <div class ="blog-title" ><a href="/blog">{{p.title}}</a></div>
+    <h2><div class ="blog-title" ><a href="/blog/{{p.key().id()}}">{{p.title}}</a></div></h2>
     <div class = "blog-submittedDate" >{{p.submitted_dt.strftime("%b %d, %Y")}}</div>
   <hr>
     <div class="blog-content">{{p.content}}</div>

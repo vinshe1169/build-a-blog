@@ -75,6 +75,7 @@ class NewPostHandler(Handler):
             error = "We need both title and content!"
             self.render("newpost.html", title = title, content=content, error= error)
             #return render_newpost("newpost.html", title=title,content=content,error= error)
+            
 
 class PostPageHandler(Handler):
     def get(self,id):
