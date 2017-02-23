@@ -1,12 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
   {% for p in posts %}
-  <label>
-    <div align= left><a href="/blog/<id:\d+"p.id>{{p.title}}</a></div>
-    <div align=right>{{p.submitted_dt.strftime("%b %d, %Y")}}</div>
-  </label>
+    <div class ="blog-title" ><a href="/blog">{{p.title}}</a></div>
+    <div class = "blog-submittedDate" >{{p.submitted_dt.strftime("%b %d, %Y")}}</div>
   <hr>
-  <label>{{p.content}}</label>
-<br><br>
+    <div class="blog-content">{{p.content}}</div>
+  <br><br>
   {% endfor %}
 {% endblock %}

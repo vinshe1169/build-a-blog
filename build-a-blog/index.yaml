@@ -27,6 +27,22 @@ indexes:
   properties:
   - name: submitted_dt
     direction: desc
+  - name: ID
+  - name: content
+  - name: title
+
+- kind: Post
+  properties:
+  - name: submitted_dt
+    direction: desc
+  - name: content
+  - name: id
+  - name: title
+
+- kind: Post
+  properties:
+  - name: submitted_dt
+    direction: desc
   - name: content
   - name: title
 
